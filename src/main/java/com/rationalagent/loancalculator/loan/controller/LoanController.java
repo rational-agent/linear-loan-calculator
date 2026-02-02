@@ -2,6 +2,7 @@ package com.rationalagent.loancalculator.loan.controller;
 
 import com.rationalagent.loancalculator.loan.LoanService;
 import com.rationalagent.loancalculator.loan.repository.model.Loan;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
