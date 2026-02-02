@@ -4,8 +4,13 @@ package com.rationalagent.loancalculator.loan.repository.model;
 
 import jakarta.persistence.*;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 public class Loan {
@@ -14,38 +19,94 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private LoanSpecification loanSpecification;
+    @NotNull(message = "{error.principal.mandatory}")
+    @Positive(message = "{error.principal.belowMinimum}")
+    @Max(value = 1_000_000_000, message = "{error.principal.aboveMaximum}")
+    private BigDecimal principal;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @NotNull(message = "{error.interest.mandatory}")
+    @Min(value = 0, message = "{error.interest.belowMinimum}")
+    @Max(value = 100, message = "{error.interest.aboveMaximum}")
+    private BigDecimal interestRate;
+
+    @NotNull
+    private LocalDate startDate;
+
+    @NotNull
+    private LocalDate endDate;
+
+    @NotNull
+    @Min(value = 1, message = "{error.interest.belowMinimum}")
+    @Max(value = 28, message = "{error.interest.aboveMaximum}")
+    private int payDay;
+
+    @NotNull(message = "{error.amortizationMethod.mandatory}")
+    private AmortizationMethod amortizationMethod;
+
+    @Transient
     private AmortizationSummary amortizationSummary;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @Transient
     private List<MonthlyPayment> amortizationSchedule;
 
     public Loan() {
     }
 
-    public Loan(LoanSpecification loanSpecification, AmortizationSummary amortizationSummary, List<MonthlyPayment> amortizationSchedule) {
-        this.loanSpecification = loanSpecification;
-        this.amortizationSummary = amortizationSummary;
-        this.amortizationSchedule = amortizationSchedule;
+    public Loan(BigDecimal principal, BigDecimal interestRate, LocalDate startDate, LocalDate endDate, int payDay, AmortizationMethod amortizationMethod) {
+        this.principal = principal;
+        this.interestRate = interestRate;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.payDay = payDay;
+        this.amortizationMethod = amortizationMethod;
     }
 
-    public Long getId() {
-        return id;
+    public BigDecimal getPrincipal() {
+        return principal;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setPrincipal(BigDecimal principal) {
+        this.principal = principal;
     }
 
-    public LoanSpecification getLoanSpecification() {
-        return loanSpecification;
+    public BigDecimal getInterestRate() {
+        return interestRate;
     }
 
-    public void setLoanSpecification(LoanSpecification loanSpecification) {
-        this.loanSpecification = loanSpecification;
+    public void setInterestRate(BigDecimal interestRate) {
+        this.interestRate = interestRate;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    public int getPayDay() {
+        return payDay;
+    }
+
+    public void setPayDay(int payDay) {
+        this.payDay = payDay;
+    }
+
+    public AmortizationMethod getAmortizationMethod() {
+        return amortizationMethod;
+    }
+
+    public void setAmortizationMethod(AmortizationMethod amortizationMethod) {
+        this.amortizationMethod = amortizationMethod;
     }
 
     public AmortizationSummary getAmortizationSummary() {
@@ -62,18 +123,5 @@ public class Loan {
 
     public void setAmortizationSchedule(List<MonthlyPayment> amortizationSchedule) {
         this.amortizationSchedule = amortizationSchedule;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Loan loan = (Loan) o;
-        return Objects.equals(id, loan.id) && Objects.equals(loanSpecification, loan.loanSpecification) && Objects.equals(amortizationSummary, loan.amortizationSummary) && Objects.equals(amortizationSchedule, loan.amortizationSchedule);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, loanSpecification, amortizationSummary, amortizationSchedule);
     }
 }

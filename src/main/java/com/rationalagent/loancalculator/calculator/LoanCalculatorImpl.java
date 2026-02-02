@@ -1,11 +1,6 @@
 package com.rationalagent.loancalculator.calculator;
 
-import com.rationalagent.loancalculator.loan.repository.model.AmortizationSummary;
-import com.rationalagent.loancalculator.loan.repository.model.Loan;
-import com.rationalagent.loancalculator.loan.repository.model.LoanSpecification;
-import com.rationalagent.loancalculator.loan.repository.model.MonthlyPayment;
-import com.rationalagent.loancalculator.loan.repository.model.Payment;
-import com.rationalagent.loancalculator.loan.repository.model.PaymentType;
+import com.rationalagent.loancalculator.loan.repository.model.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -142,25 +137,27 @@ public class LoanCalculatorImpl implements LoanCalculator {
         return spec.getInterestRate().divide(MONTHS_IN_A_YEAR, 10, RoundingMode.HALF_EVEN);
     }
 
-    private Loan buildLoan(LoanSpecification loan, BigDecimal payedLoanAmount, BigDecimal totalInterestPayed, BigDecimal totalPrincipalError, BigDecimal totalInterestError, List<MonthlyPayment> monthlyPayments) {
-        return new Loan(
-                new LoanSpecification(
-                        getRoundedAmount(loan.getPrincipal()),
-                        loan.getInterestRate(),
-                        loan.getStartDate(),
-                        loan.getEndDate(),
-                        loan.getPayDay(),
-                        loan.getAmortizationMethod()
-                ),
-                new AmortizationSummary(
-                        getRoundedAmount(payedLoanAmount).add(getRoundedAmount(totalInterestPayed)).add(getRoundedAmount(totalPrincipalError)).add(getRoundedAmount(totalInterestError)),
-                        getRoundedAmount(payedLoanAmount),
-                        getRoundedAmount(totalPrincipalError),
-                        getRoundedAmount(totalInterestPayed),
-                        getRoundedAmount(totalInterestError)
-                ),
-                monthlyPayments
+    private Loan buildLoan(LoanSpecification loanSpecification, BigDecimal payedLoanAmount, BigDecimal totalInterestPayed, BigDecimal totalPrincipalError, BigDecimal totalInterestError, List<MonthlyPayment> monthlyPayments) {
+        var loan = new Loan(
+                getRoundedAmount(loanSpecification.getPrincipal()),
+                loanSpecification.getInterestRate(),
+                loanSpecification.getStartDate(),
+                loanSpecification.getEndDate(),
+                loanSpecification.getPayDay(),
+                loanSpecification.getAmortizationMethod()
         );
+        var summary = new AmortizationSummary(
+                getRoundedAmount(payedLoanAmount).add(getRoundedAmount(totalInterestPayed)).add(getRoundedAmount(totalPrincipalError)).add(getRoundedAmount(totalInterestError)),
+                getRoundedAmount(payedLoanAmount),
+                getRoundedAmount(totalPrincipalError),
+                getRoundedAmount(totalInterestPayed),
+                getRoundedAmount(totalInterestError)
+        );
+
+        loan.setAmortizationSummary(summary);
+        loan.setAmortizationSchedule(monthlyPayments);
+
+        return loan;
     }
 
     private BigDecimal calculateMonthlyInterest(BigDecimal remainingPrincipal, BigDecimal decimalInterest) {

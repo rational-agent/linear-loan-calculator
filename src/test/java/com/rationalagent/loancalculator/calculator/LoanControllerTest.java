@@ -1,10 +1,9 @@
 package com.rationalagent.loancalculator.calculator;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -37,15 +36,5 @@ class LoanControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(Files.readString(Path.of("src", "test", "resources", "json", "valid-request.json"))))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    @Disabled
-    void givenARunningApplication_whenSendingRequestWithInvalidPayload_thenReturns400() throws Exception {
-        mockMvc.perform(
-                        post("/loans/calculate")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(Files.readString(Path.of("src", "test", "resources", "json", "invalid-request.json"))))
-                .andExpect(status().isBadRequest());
     }
 }

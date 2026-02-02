@@ -1,19 +1,12 @@
 package com.rationalagent.loancalculator.loan.repository.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Entity
 public class MonthlyPayment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private LocalDate paymentDate;
@@ -21,9 +14,6 @@ public class MonthlyPayment {
     private BigDecimal principalPayment;
     private BigDecimal interestPayment;
     private BigDecimal remainingLoanAmount;
-
-    public MonthlyPayment() {
-    }
 
     public MonthlyPayment(LocalDate paymentDate, BigDecimal principalPayment, BigDecimal interestPayment, BigDecimal remainingLoanAmount) {
         this.paymentDate = paymentDate;

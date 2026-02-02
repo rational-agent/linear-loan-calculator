@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -50,8 +49,8 @@ class LoanCalculatorImplTest {
                         .stream()
                         .map(payment -> payment.getPaymentDate().getDayOfMonth())
                         .distinct()
-                        .collect(Collectors.toList())
-                        .get(0));
+                        .toList()
+                        .getFirst());
     }
 
     @Test
@@ -75,16 +74,4 @@ class LoanCalculatorImplTest {
                         .distinct()
                         .count());
     }
-
-/*    @Test
-    void sumOfPrincipalPaymentsAndPrincipalErrorShouldBeEqualToLoanAmount() {
-        assertEquals(calculatedMortgage.getLoanAmount(),
-                calculatedMortgage
-                        .getAmortizationSchedule()
-                        .stream()
-                        .filter(monthlyPayment -> monthlyPayment.getPayments().stream().filter(payment -> payment.getType().equals(PaymentType.PRINCIPAL_PAYMENT)))
-                        .reduce(BigDecimal.ZERO, BigDecimal::add)
-                //.add(calculatedMortgage.getAmortizationSummary().getLoanAmountRoundingError())
-        );
-    }*/
 }

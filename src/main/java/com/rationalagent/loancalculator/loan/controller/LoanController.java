@@ -43,13 +43,13 @@ public class LoanController {
     }
 
     @PostMapping("/loans/{id}/calculate")
-    public Loan calculate(@RequestBody @Valid Loan loan, @PathVariable("id") Long id) {
-        return service.calculate(loan, id);
+    public Loan calculate(@PathVariable("id") Long id, @RequestBody @Valid Loan loan) {
+        return service.calculate(id, loan);
     }
 
     @PutMapping("/loans/{id}")
-    public Loan update(@RequestBody Loan loan, @PathVariable("id") Long id) {
-        return service.update(loan, id);
+    public Loan update( @PathVariable("id") Long id, @RequestBody Loan loan) {
+        return service.update(id, loan);
     }
 
     @DeleteMapping("/loans/{id}")
