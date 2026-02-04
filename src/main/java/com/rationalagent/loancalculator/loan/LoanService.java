@@ -3,7 +3,6 @@ package com.rationalagent.loancalculator.loan;
 import com.rationalagent.loancalculator.calculator.LoanCalculatorImpl;
 import com.rationalagent.loancalculator.loan.exceptions.LoanNotFoundException;
 import com.rationalagent.loancalculator.loan.repository.LoanRepository;
-import com.rationalagent.loancalculator.loan.repository.model.AmortizationMethod;
 import com.rationalagent.loancalculator.loan.repository.model.Loan;
 import com.rationalagent.loancalculator.loan.repository.model.LoanSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,12 +60,11 @@ public class LoanService {
 
     private static LoanSpecification getLoanSpecification(Loan loan) {
         return new LoanSpecification(
-          loan.getPrincipal(),
-          loan.getInterestRate(),
-          loan.getStartDate(),
-          loan.getEndDate(),
-          loan.getPayDay(),
-          AmortizationMethod.LINEAR
+                loan.getPrincipal(),
+                loan.getInterestRate(),
+                loan.getStartDate(),
+                loan.getEndDate(),
+                loan.getPayDay()
         );
     }
 }

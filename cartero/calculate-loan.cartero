@@ -7,9 +7,8 @@ type = "raw"
 format = "json"
 body = """
 {
-    "id": 1,
     "principal": 480000.01,
-    "interestRate": 2,
+    "interestRate": 2.5,
     "startDate": "2021-01-01",
     "endDate": "2051-01-01",
     "payDay": 25,

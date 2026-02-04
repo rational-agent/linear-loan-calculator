@@ -52,13 +52,20 @@ public class Loan {
     public Loan() {
     }
 
-    public Loan(BigDecimal principal, BigDecimal interestRate, LocalDate startDate, LocalDate endDate, int payDay, AmortizationMethod amortizationMethod) {
+    public Loan(BigDecimal principal, BigDecimal interestRate, LocalDate startDate, LocalDate endDate, int payDay) {
         this.principal = principal;
         this.interestRate = interestRate;
         this.startDate = startDate;
         this.endDate = endDate;
         this.payDay = payDay;
-        this.amortizationMethod = amortizationMethod;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public BigDecimal getPrincipal() {

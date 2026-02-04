@@ -26,21 +26,21 @@ public class LoanCalculatorImpl implements LoanCalculator {
 
 
     public Loan calculateLoan(LoanSpecification spec) {
-        Integer termAmount = calculateTermInMonths(spec);
-        BigDecimal interestRateAsDecimal = spec.getInterestRate().movePointLeft(2);
+        var termAmount = calculateTermInMonths(spec);
+        var interestRateAsDecimal = spec.getInterestRate().movePointLeft(2);
 
-        Payment regular = calculatePrincipalPayment(spec);
-        Payment firstMonth = calculateFirstPrincipalPayment(spec);
+        var regular = calculatePrincipalPayment(spec);
+        var firstMonth = calculateFirstPrincipalPayment(spec);
 
-        LocalDate paymentDate = spec.getStartDate().withDayOfMonth(spec.getPayDay());
+        var paymentDate = spec.getStartDate().withDayOfMonth(spec.getPayDay());
 
-        BigDecimal principalBalance = spec.getPrincipal();
-        BigDecimal principalBalanceError = regular.getPaymentRoundingError().multiply(new BigDecimal(termAmount));
+        var principalBalance = spec.getPrincipal();
+        var principalBalanceError = regular.getPaymentRoundingError().multiply(new BigDecimal(termAmount));
 
-        BigDecimal payedLoanAmount = BigDecimal.ZERO;
-        BigDecimal payedInterestAmount = BigDecimal.ZERO;
-        BigDecimal totalPrincipalError = BigDecimal.ZERO;
-        BigDecimal totalInterestError = BigDecimal.ZERO;
+        var payedLoanAmount = BigDecimal.ZERO;
+        var payedInterestAmount = BigDecimal.ZERO;
+        var totalPrincipalError = BigDecimal.ZERO;
+        var totalInterestError = BigDecimal.ZERO;
 
         while (principalBalance.compareTo(BigDecimal.ZERO) > 0) {
 
@@ -56,8 +56,8 @@ public class LoanCalculatorImpl implements LoanCalculator {
                 totalPrincipalError = totalPrincipalError.add(regular.getPaymentRoundingError());
             }
 
-            BigDecimal payedInterest = calculateMonthlyInterest(principalBalance, interestRateAsDecimal);
-            BigDecimal payedInterestOnError = calculateMonthlyInterest(principalBalanceError, interestRateAsDecimal);
+            var payedInterest = calculateMonthlyInterest(principalBalance, interestRateAsDecimal);
+            var payedInterestOnError = calculateMonthlyInterest(principalBalanceError, interestRateAsDecimal);
 
             principalBalance = recalculatePrincipalBalance.apply(principalBalance, principalPayment);
 
@@ -76,8 +76,8 @@ public class LoanCalculatorImpl implements LoanCalculator {
 
     @Override
     public Payment calculateFirstPrincipalPayment(LoanSpecification spec) {
-        BigDecimal startDateWeight = LoanCalculatorHelper.getMonthWeight(spec.getStartDate());
-        Payment regularPayment = calculatePrincipalPayment(spec);
+        var startDateWeight = LoanCalculatorHelper.getMonthWeight(spec.getStartDate());
+        var regularPayment = calculatePrincipalPayment(spec);
         return new Payment(PaymentType.PRINCIPAL_PAYMENT, regularPayment.getPaymentUnrounded().multiply(startDateWeight));
     }
 
@@ -87,17 +87,17 @@ public class LoanCalculatorImpl implements LoanCalculator {
 
     @Override
     public List<MonthlyPayment> calculateAmortizationSchedule(LoanSpecification spec) {
-        BigDecimal interestRateAsDecimal = spec.getInterestRate().movePointLeft(2);
+        var interestRateAsDecimal = spec.getInterestRate().movePointLeft(2);
 
-        Payment regular = calculatePrincipalPayment(spec);
-        Payment firstMonth = calculateFirstPrincipalPayment(spec);
+        var regular = calculatePrincipalPayment(spec);
+        var firstMonth = calculateFirstPrincipalPayment(spec);
 
-        LocalDate paymentDate = spec.getStartDate().withDayOfMonth(spec.getPayDay());
+        var paymentDate = spec.getStartDate().withDayOfMonth(spec.getPayDay());
 
-        BigDecimal principalBalance = spec.getPrincipal();
+        var principalBalance = spec.getPrincipal();
 
-        BigDecimal totalPrincipalError = BigDecimal.ZERO;
-        List<MonthlyPayment> monthlyPayments = new ArrayList<>();
+        var totalPrincipalError = BigDecimal.ZERO;
+        var monthlyPayments = new ArrayList<MonthlyPayment>();
 
         while (principalBalance.compareTo(BigDecimal.ZERO) > 0) {
 
@@ -113,7 +113,7 @@ public class LoanCalculatorImpl implements LoanCalculator {
                 totalPrincipalError = totalPrincipalError.add(regular.getPaymentRoundingError());
             }
 
-            Payment interestPayment = new Payment(PaymentType.INTEREST_PAYMENT, calculateMonthlyInterest(principalBalance, interestRateAsDecimal));
+            var interestPayment = new Payment(PaymentType.INTEREST_PAYMENT, calculateMonthlyInterest(principalBalance, interestRateAsDecimal));
 
             principalBalance = recalculatePrincipalBalance.apply(principalBalance, principalPayment.getPaymentRounded());
             monthlyPayments.add(new MonthlyPayment(
@@ -143,8 +143,7 @@ public class LoanCalculatorImpl implements LoanCalculator {
                 loanSpecification.getInterestRate(),
                 loanSpecification.getStartDate(),
                 loanSpecification.getEndDate(),
-                loanSpecification.getPayDay(),
-                loanSpecification.getAmortizationMethod()
+                loanSpecification.getPayDay()
         );
         var summary = new AmortizationSummary(
                 getRoundedAmount(payedLoanAmount).add(getRoundedAmount(totalInterestPayed)).add(getRoundedAmount(totalPrincipalError)).add(getRoundedAmount(totalInterestError)),

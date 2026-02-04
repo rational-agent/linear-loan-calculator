@@ -54,13 +54,12 @@ public class LoanSpecification {
 
     public LoanSpecification() {}
 
-    public LoanSpecification(BigDecimal loanAmount, BigDecimal annualPercentageRate, LocalDate startDate, LocalDate endDate, int payDay, AmortizationMethod amortizationMethod) {
+    public LoanSpecification(BigDecimal loanAmount, BigDecimal annualPercentageRate, LocalDate startDate, LocalDate endDate, int payDay) {
         this.principal = loanAmount;
         this.interestRate = annualPercentageRate;
         this.startDate = startDate;
         this.endDate = endDate;
         this.payDay = payDay;
-        this.amortizationMethod = amortizationMethod;
     }
 
     public BigDecimal getPrincipal() {
@@ -107,20 +106,16 @@ public class LoanSpecification {
         return payDay;
     }
 
-    public AmortizationMethod getAmortizationMethod() {
-        return amortizationMethod;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LoanSpecification that = (LoanSpecification) o;
-        return payDay == that.payDay && Objects.equals(principal, that.principal) && Objects.equals(interestRate, that.interestRate) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && amortizationMethod == that.amortizationMethod;
+        return payDay == that.payDay && Objects.equals(principal, that.principal) && Objects.equals(interestRate, that.interestRate) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(principal, interestRate, startDate, endDate, payDay, amortizationMethod);
+        return Objects.hash(principal, interestRate, startDate, endDate, payDay);
     }
 }

@@ -16,8 +16,9 @@ class LoanCalculatorHelper {
     private static final BigDecimal MONTHS_IN_A_YEAR = new BigDecimal("12.00");
 
     static int calculateLoanLifeInMonths(LocalDate startDate, LocalDate endDate) {
-        LocalDate firstDay = startDate.with(TemporalAdjusters.firstDayOfMonth());
-        LocalDate lastDate = endDate.with(TemporalAdjusters.firstDayOfMonth());
+        var firstDay = startDate.with(TemporalAdjusters.firstDayOfMonth());
+        var lastDate = endDate.with(TemporalAdjusters.firstDayOfMonth());
+
         return (int) ChronoUnit.MONTHS.between(firstDay, lastDate);
     }
 
@@ -33,14 +34,14 @@ class LoanCalculatorHelper {
         if(isAtStartOfMonth(date)) {
             return BigDecimal.ONE;
         } else {
-            LocalDate firstDay = date.with(TemporalAdjusters.firstDayOfMonth());
-            LocalDate lastDate = date.with(TemporalAdjusters.lastDayOfMonth());
-            long amountOfDaysInMonth = Duration.between(firstDay.atStartOfDay(), lastDate.atStartOfDay()).toDays();
-            long amountOfDaysInBetween = Duration.between(date.atStartOfDay(), lastDate.atStartOfDay()).toDays();
+            var firstDay = date.with(TemporalAdjusters.firstDayOfMonth());
+            var lastDate = date.with(TemporalAdjusters.lastDayOfMonth());
+            var amountOfDaysInMonth = Duration.between(firstDay.atStartOfDay(), lastDate.atStartOfDay()).toDays();
+            var amountOfDaysInBetween = Duration.between(date.atStartOfDay(), lastDate.atStartOfDay()).toDays();
+
             return BigDecimal.valueOf((1.0 / amountOfDaysInMonth) * amountOfDaysInBetween);
         }
     }
-
 
     private static boolean isAtStartOfMonth(LocalDate date) {
         return date.getDayOfMonth() == 1;

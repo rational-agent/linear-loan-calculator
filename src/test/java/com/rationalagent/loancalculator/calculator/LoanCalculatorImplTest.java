@@ -21,8 +21,7 @@ class LoanCalculatorImplTest {
             new BigDecimal("1.75"),
             LocalDate.of(2020, 1, 15),
             LocalDate.of(2050, 1, 1),
-            15,
-            AmortizationMethod.LINEAR
+            15
     );
 
     @BeforeEach
