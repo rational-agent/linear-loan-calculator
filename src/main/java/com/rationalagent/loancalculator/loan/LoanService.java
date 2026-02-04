@@ -1,6 +1,6 @@
 package com.rationalagent.loancalculator.loan;
 
-import com.rationalagent.loancalculator.calculator.LoanCalculatorImpl;
+import com.rationalagent.loancalculator.calculator.LoanCalculator;
 import com.rationalagent.loancalculator.loan.exceptions.LoanNotFoundException;
 import com.rationalagent.loancalculator.loan.repository.LoanRepository;
 import com.rationalagent.loancalculator.loan.repository.model.Loan;
@@ -18,8 +18,7 @@ public class LoanService {
 
     public Loan calculate(Long id, Loan loan) {
         var spec = getLoanSpecification(loan);
-        var calculator = new LoanCalculatorImpl();
-        var calculatedLoan = calculator.calculateLoan(spec);
+        var calculatedLoan = LoanCalculator.calculateLoan(spec);
 
         return update(id, calculatedLoan);
     }
