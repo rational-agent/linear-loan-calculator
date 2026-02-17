@@ -2,7 +2,13 @@ package com.rationalagent.loancalculator.loan.repository.model;
 
 
 
-import jakarta.persistence.*;
+
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -39,9 +45,6 @@ public class Loan {
     @Min(value = 1, message = "{error.interest.belowMinimum}")
     @Max(value = 28, message = "{error.interest.aboveMaximum}")
     private int payDay;
-
-    @NotNull(message = "{error.amortizationMethod.mandatory}")
-    private AmortizationMethod amortizationMethod;
 
     @Transient
     private AmortizationSummary amortizationSummary;
@@ -106,14 +109,6 @@ public class Loan {
 
     public void setPayDay(int payDay) {
         this.payDay = payDay;
-    }
-
-    public AmortizationMethod getAmortizationMethod() {
-        return amortizationMethod;
-    }
-
-    public void setAmortizationMethod(AmortizationMethod amortizationMethod) {
-        this.amortizationMethod = amortizationMethod;
     }
 
     public AmortizationSummary getAmortizationSummary() {

@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -14,7 +13,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-public class LoanSpecification {
+public class LoanDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,9 +40,6 @@ public class LoanSpecification {
     @Max(value = 28, message = "{error.interest.aboveMaximum}")
     private int payDay;
 
-    @NotNull(message = "{error.amortizationMethod.mandatory}")
-    private AmortizationMethod amortizationMethod;
-
     public Long getId() {
         return id;
     }
@@ -52,9 +48,10 @@ public class LoanSpecification {
         this.id = id;
     }
 
-    public LoanSpecification() {}
+    public LoanDetails() {
+    }
 
-    public LoanSpecification(BigDecimal loanAmount, BigDecimal annualPercentageRate, LocalDate startDate, LocalDate endDate, int payDay) {
+    public LoanDetails(BigDecimal loanAmount, BigDecimal annualPercentageRate, LocalDate startDate, LocalDate endDate, int payDay) {
         this.principal = loanAmount;
         this.interestRate = annualPercentageRate;
         this.startDate = startDate;
@@ -86,10 +83,6 @@ public class LoanSpecification {
         this.payDay = payDay;
     }
 
-    public void setAmortizationMethod(AmortizationMethod amortizationMethod) {
-        this.amortizationMethod = amortizationMethod;
-    }
-
     public BigDecimal getInterestRate() {
         return interestRate;
     }
@@ -108,9 +101,13 @@ public class LoanSpecification {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LoanSpecification that = (LoanSpecification) o;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        LoanDetails that = (LoanDetails) o;
         return payDay == that.payDay && Objects.equals(principal, that.principal) && Objects.equals(interestRate, that.interestRate) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate);
     }
 

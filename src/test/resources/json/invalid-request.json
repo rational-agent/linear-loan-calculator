@@ -4,7 +4,6 @@
   "startDate": "2020-01-01",
   "endDate": "2050-01-01",
   "payDay": 154565,
-  "amortizationMethod": "LINEAR",
   "amortizationSummary": {
     "loanAmount": 350000,
     "totalInterest": 2.000

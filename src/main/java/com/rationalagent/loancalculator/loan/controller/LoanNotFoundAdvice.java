@@ -1,7 +1,7 @@
 package com.rationalagent.loancalculator.loan.controller;
 
 import com.rationalagent.loancalculator.loan.exceptions.LoanNotFoundException;
-import com.rationalagent.loancalculator.loan.exceptions.LoanSpecificationNotPresent;
+import com.rationalagent.loancalculator.loan.exceptions.LoanDetailsNotPresent;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,9 +19,9 @@ class LoanNotFoundAdvice {
     }
 
     @ResponseBody
-    @ExceptionHandler(LoanSpecificationNotPresent.class)
+    @ExceptionHandler(LoanDetailsNotPresent.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String loanSpecificationNotPresentHandler(LoanSpecificationNotPresent ex) {
+    String loanSpecificationNotPresentHandler(LoanDetailsNotPresent ex) {
         return ex.getMessage();
     }
 }

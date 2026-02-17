@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC "-//Checkstyle//DTD SuppressionFilter Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2.dtd">
+<suppressions>
+    <suppress checks="Indentation"/>
+    <suppress checks="CustomImportOrder"/>
+    <suppress checks="LineLength"/>
+
+    <suppress checks="MissingJavadocType" files="JacksonConfiguration.java"/>
+    <suppress checks="MissingJavadocMethod" files="JacksonConfiguration.java"/>
+    <suppress checks="MissingJavadocType" files="ApiError.java"/>
+    <suppress checks="MissingJavadocMethod" files="ApiError.java"/>
+    <suppress checks="MissingJavadocMethod" files="LoanController.java"/>
+    <suppress checks="MissingJavadocType" files="LoanDetailsNotPresent.java"/>
+    <suppress checks="MissingJavadocType" files="LoanNotFoundException.java"/>
+
+    <suppress checks="MissingJavadocType" files="LoanService.java"/>
+    <suppress checks="MissingJavadocMethod" files="LoanService.java"/>
+
+    <suppress checks="MissingJavadocType" files="Payment.java"/>
+    <suppress checks="MissingJavadocMethod" files="Payment.java"/>
+
+    <suppress checks="MissingJavadocType" files="LoanDetails.java"/>
+    <suppress checks="MissingJavadocMethod" files="LoanDetails.java"/>
+
+    <suppress checks="MissingJavadocType" files="AmortizationSummary.java"/>
+    <suppress checks="MissingJavadocMethod" files="AmortizationSummary.java"/>
+
+    <suppress checks="MissingJavadocType" files="MonthlyPayment.java"/>
+    <suppress checks="MissingJavadocMethod" files="MonthlyPayment.java"/>
+
+    <suppress checks="MissingJavadocType" files="Loan.java"/>
+    <suppress checks="MissingJavadocMethod" files="Loan.java"/>
+
+    <suppress checks="MissingJavadocType" files="PaymentRepository.java"/>
+    <suppress checks="MissingJavadocType" files="LoanRepository.java"/>
+    <suppress checks="MissingJavadocType" files="PaymentType.java"/>
+</suppressions>
+

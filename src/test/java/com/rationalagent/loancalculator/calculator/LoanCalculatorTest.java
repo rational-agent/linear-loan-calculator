@@ -1,7 +1,7 @@
 package com.rationalagent.loancalculator.calculator;
 
 import com.rationalagent.loancalculator.loan.repository.model.AmortizationSummary;
-import com.rationalagent.loancalculator.loan.repository.model.LoanSpecification;
+import com.rationalagent.loancalculator.loan.repository.model.LoanDetails;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LoanCalculatorTest {
 
-    LoanSpecification spec = new LoanSpecification(
+    LoanDetails spec = new LoanDetails(
             new BigDecimal("500000.00"),
             new BigDecimal("1.75"),
             LocalDate.of(2020, 1, 15),

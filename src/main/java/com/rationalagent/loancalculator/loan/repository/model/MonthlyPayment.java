@@ -15,6 +15,7 @@ public class MonthlyPayment {
     private BigDecimal interestPayment;
     private BigDecimal remainingLoanAmount;
 
+    // TODO: consider removing remainingLoanAmount
     public MonthlyPayment(LocalDate paymentDate, BigDecimal principalPayment, BigDecimal interestPayment, BigDecimal remainingLoanAmount) {
         this.paymentDate = paymentDate;
         this.principalPayment = principalPayment;

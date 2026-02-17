@@ -3,6 +3,10 @@ package com.rationalagent.loancalculator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * An application that calculates linear loans.
+ *
+ */
 @SpringBootApplication
 public class LoanCalculatorApplication {
 

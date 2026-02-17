@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,11 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * REST API for creating, reading, calculating and deleting loans.
+ *
+ */
+@CrossOrigin
 @RestController
 public class LoanController {
 
@@ -29,7 +35,7 @@ public class LoanController {
 
     @GetMapping("/loans")
     public List<Loan> readAll() {
-        return service.readAll();
+        return service.calculateAll();
     }
 
     @GetMapping("/loans/{id}")
@@ -48,7 +54,7 @@ public class LoanController {
     }
 
     @PutMapping("/loans/{id}")
-    public Loan update( @PathVariable("id") Long id, @RequestBody Loan loan) {
+    public Loan update(@PathVariable("id") Long id, @RequestBody Loan loan) {
         return service.update(id, loan);
     }
 

@@ -1,15 +1,29 @@
 package com.rationalagent.loancalculator.calculator;
 
-import com.rationalagent.loancalculator.loan.repository.model.*;
 
+import com.rationalagent.loancalculator.loan.repository.model.AmortizationSummary;
+import com.rationalagent.loancalculator.loan.repository.model.Loan;
+import com.rationalagent.loancalculator.loan.repository.model.LoanDetails;
+import com.rationalagent.loancalculator.loan.repository.model.MonthlyPayment;
+import com.rationalagent.loancalculator.loan.repository.model.Payment;
+import com.rationalagent.loancalculator.loan.repository.model.PaymentType;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
 
+/**
+ * Calculates a loan including amortization.
+ *
+ */
 public class LoanCalculator {
 
-    public static Loan calculateLoan(LoanSpecification spec) {
+    /**
+     * Calculates a loan based on loan details.
+     *
+     * @return a loan which includes a loan summary and amortization schedule.
+     */
+    public static Loan calculateLoan(LoanDetails spec) {
         var termAmount = LoanCalculatorHelper.calculateTermInMonths(spec);
         var interestRateAsDecimal = spec.getInterestRate().movePointLeft(2);
 
@@ -40,8 +54,8 @@ public class LoanCalculator {
                 totalPrincipalError = totalPrincipalError.add(regular.getPaymentRoundingError());
             }
 
-            var payedInterest = calculateMonthlyInterest(principalBalance, interestRateAsDecimal);
-            var payedInterestOnError = calculateMonthlyInterest(principalBalanceError, interestRateAsDecimal);
+            final var payedInterest = calculateMonthlyInterest(principalBalance, interestRateAsDecimal);
+            final var payedInterestOnError = calculateMonthlyInterest(principalBalanceError, interestRateAsDecimal);
 
             principalBalance = LoanCalculatorHelper.recalculatePrincipalBalance(principalBalance, principalPayment);
 
@@ -60,17 +74,17 @@ public class LoanCalculator {
         return buildLoan(spec, payedLoanAmount, payedInterestAmount, totalPrincipalError, totalInterestError, amortization);
     }
 
-    private static Payment calculatePrincipalPayment(LoanSpecification spec) {
+    private static Payment calculatePrincipalPayment(LoanDetails spec) {
         return new Payment(PaymentType.PRINCIPAL_PAYMENT, spec.getPrincipal().divide(new BigDecimal(LoanCalculatorHelper.calculateTermInMonths(spec)), 10, RoundingMode.HALF_EVEN));
     }
 
-    private static Loan buildLoan(LoanSpecification loanSpecification, BigDecimal payedLoanAmount, BigDecimal totalInterestPayed, BigDecimal totalPrincipalError, BigDecimal totalInterestError, List<MonthlyPayment> monthlyPayments) {
+    private static Loan buildLoan(LoanDetails loanDetails, BigDecimal payedLoanAmount, BigDecimal totalInterestPayed, BigDecimal totalPrincipalError, BigDecimal totalInterestError, List<MonthlyPayment> monthlyPayments) {
         var loan = new Loan(
-                getRoundedAmount(loanSpecification.getPrincipal()),
-                loanSpecification.getInterestRate(),
-                loanSpecification.getStartDate(),
-                loanSpecification.getEndDate(),
-                loanSpecification.getPayDay()
+                getRoundedAmount(loanDetails.getPrincipal()),
+                loanDetails.getInterestRate(),
+                loanDetails.getStartDate(),
+                loanDetails.getEndDate(),
+                loanDetails.getPayDay()
         );
         var summary = new AmortizationSummary(
                 getRoundedAmount(payedLoanAmount).add(getRoundedAmount(totalInterestPayed)).add(getRoundedAmount(totalPrincipalError)).add(getRoundedAmount(totalInterestError)),

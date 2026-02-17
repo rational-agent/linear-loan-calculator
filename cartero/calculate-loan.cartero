@@ -12,7 +12,6 @@ body = """
     "startDate": "2021-01-01",
     "endDate": "2051-01-01",
     "payDay": 25,
-    "amortizationMethod": "LINEAR",
     "amortizationSummary": null,
     "amortizationSchedule": null
 }"""

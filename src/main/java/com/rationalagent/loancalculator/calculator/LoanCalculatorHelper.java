@@ -1,6 +1,6 @@
 package com.rationalagent.loancalculator.calculator;
 
-import com.rationalagent.loancalculator.loan.repository.model.LoanSpecification;
+import com.rationalagent.loancalculator.loan.repository.model.LoanDetails;
 import com.rationalagent.loancalculator.loan.repository.model.Payment;
 import com.rationalagent.loancalculator.loan.repository.model.PaymentType;
 
@@ -22,7 +22,7 @@ class LoanCalculatorHelper {
     }
 
 
-    static Integer calculateTermInMonths(LoanSpecification spec) {
+    static Integer calculateTermInMonths(LoanDetails spec) {
         return LoanCalculatorHelper.calculateLoanLifeInMonths(spec.getStartDate(), spec.getEndDate());
     }
 
@@ -43,13 +43,13 @@ class LoanCalculatorHelper {
         }
     }
 
-    static Payment calculateFirstPrincipalPayment(LoanSpecification spec) {
+    static Payment calculateFirstPrincipalPayment(LoanDetails spec) {
         var startDateWeight = LoanCalculatorHelper.getMonthWeight(spec.getStartDate());
         var regularPayment = calculatePrincipalPayment(spec);
         return new Payment(PaymentType.PRINCIPAL_PAYMENT, regularPayment.getPaymentUnrounded().multiply(startDateWeight));
     }
 
-    static Payment calculatePrincipalPayment(LoanSpecification spec) {
+    static Payment calculatePrincipalPayment(LoanDetails spec) {
         return new Payment(PaymentType.PRINCIPAL_PAYMENT, spec.getPrincipal().divide(new BigDecimal(calculateTermInMonths(spec)), 10, RoundingMode.HALF_EVEN));
     }
 
