@@ -1,4 +1,4 @@
-package com.rationalagent.loancalculator.loan.repository.model;
+package com.rationalagent.loancalculator.calculator.dto;
 
 public enum PaymentType {
     PRINCIPAL_PAYMENT,

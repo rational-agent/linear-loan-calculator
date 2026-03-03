@@ -1,7 +1,7 @@
 package com.rationalagent.loancalculator.calculator;
 
-import com.rationalagent.loancalculator.loan.repository.model.AmortizationSummary;
-import com.rationalagent.loancalculator.loan.repository.model.LoanDetails;
+import com.rationalagent.loancalculator.loan.repository.dto.AmortizationSummary;
+import com.rationalagent.loancalculator.loan.repository.dto.LoanDetails;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -28,15 +28,15 @@ class LoanCalculatorTest {
     @Test
     void shouldCalculateAmortizationSummary() {
         AmortizationSummary as = LoanCalculator.calculateLoan(spec).getAmortizationSummary();
-        assertEquals(spec.getPrincipal(), as.getLoanAmount());
+        assertEquals(spec.principal(), as.loanAmount());
     }
 
     @Test
     void dayOfMonthShouldBeEqualToPayDay() {
-        assertEquals(spec.getPayDay(),
+        assertEquals(spec.payDay(),
                 LoanCalculator.calculateLoan(spec).getAmortizationSchedule()
                         .stream()
-                        .map(payment -> payment.getPaymentDate().getDayOfMonth())
+                        .map(payment -> payment.paymentDate().getDayOfMonth())
                         .distinct()
                         .toList()
                         .getFirst());

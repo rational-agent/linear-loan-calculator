@@ -1,15 +1,15 @@
 package com.rationalagent.loancalculator.loan.repository.model;
 
-
-
-
-
+import com.rationalagent.loancalculator.loan.repository.dto.AmortizationSummary;
+import com.rationalagent.loancalculator.loan.repository.dto.MonthlyPayment;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
-
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -19,6 +19,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@Setter
+@Getter
+@NoArgsConstructor
 public class Loan {
 
     @Id
@@ -52,9 +55,6 @@ public class Loan {
     @Transient
     private List<MonthlyPayment> amortizationSchedule;
 
-    public Loan() {
-    }
-
     public Loan(BigDecimal principal, BigDecimal interestRate, LocalDate startDate, LocalDate endDate, int payDay) {
         this.principal = principal;
         this.interestRate = interestRate;
@@ -63,67 +63,4 @@ public class Loan {
         this.payDay = payDay;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public BigDecimal getPrincipal() {
-        return principal;
-    }
-
-    public void setPrincipal(BigDecimal principal) {
-        this.principal = principal;
-    }
-
-    public BigDecimal getInterestRate() {
-        return interestRate;
-    }
-
-    public void setInterestRate(BigDecimal interestRate) {
-        this.interestRate = interestRate;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public int getPayDay() {
-        return payDay;
-    }
-
-    public void setPayDay(int payDay) {
-        this.payDay = payDay;
-    }
-
-    public AmortizationSummary getAmortizationSummary() {
-        return amortizationSummary;
-    }
-
-    public void setAmortizationSummary(AmortizationSummary amortizationSummary) {
-        this.amortizationSummary = amortizationSummary;
-    }
-
-    public List<MonthlyPayment> getAmortizationSchedule() {
-        return amortizationSchedule;
-    }
-
-    public void setAmortizationSchedule(List<MonthlyPayment> amortizationSchedule) {
-        this.amortizationSchedule = amortizationSchedule;
-    }
 }

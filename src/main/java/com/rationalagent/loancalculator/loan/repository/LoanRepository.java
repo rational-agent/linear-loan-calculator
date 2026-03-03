@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 public interface LoanRepository extends JpaRepository<Loan, Long> {
 
     @Transactional
-    default Loan upsert(Loan entity) {
-        return save(entity);
+    default Loan upsert(Loan loan) {
+        return save(loan);
     }
 
 }

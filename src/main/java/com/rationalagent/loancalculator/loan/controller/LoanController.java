@@ -3,7 +3,7 @@ package com.rationalagent.loancalculator.loan.controller;
 import com.rationalagent.loancalculator.loan.LoanService;
 import com.rationalagent.loancalculator.loan.repository.model.Loan;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,21 +17,20 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * REST API for creating, reading, calculating and deleting loans.
+ * REST API for creating, reading, calculating, and deleting loans.
  *
  */
 @CrossOrigin
 @RestController
+@RequiredArgsConstructor
 public class LoanController {
 
-    @Autowired
-    private LoanService service;
+    private final LoanService service;
 
     @GetMapping("/loans")
     public List<Loan> readAll() {
@@ -39,7 +38,7 @@ public class LoanController {
     }
 
     @GetMapping("/loans/{id}")
-    public Loan read(@PathVariable("id") Long id) {
+    public Loan read(@PathVariable Long id) {
         return service.read(id);
     }
 
@@ -49,17 +48,17 @@ public class LoanController {
     }
 
     @PostMapping("/loans/{id}/calculate")
-    public Loan calculate(@PathVariable("id") Long id, @RequestBody @Valid Loan loan) {
+    public Loan calculate(@PathVariable Long id, @RequestBody @Valid Loan loan) {
         return service.calculate(id, loan);
     }
 
     @PutMapping("/loans/{id}")
-    public Loan update(@PathVariable("id") Long id, @RequestBody Loan loan) {
+    public Loan update(@PathVariable Long id, @RequestBody Loan loan) {
         return service.update(id, loan);
     }
 
     @DeleteMapping("/loans/{id}")
-    public boolean delete(@PathVariable("id") Long id) {
+    public boolean delete(@PathVariable Long id) {
         return service.delete(id);
     }
 

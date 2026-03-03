@@ -1,15 +1,14 @@
 package com.rationalagent.loancalculator;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class LoanCalculatorApplicationTest {
@@ -19,14 +18,14 @@ class LoanCalculatorApplicationTest {
 
     @Test
     void testHealth() throws URISyntaxException {
-        RestTemplate restTemplate = new RestTemplate();
+        var restTemplate = new RestTemplate();
 
-        final String baseUrl = "http://localhost:" + randomServerPort + "/actuator/health";
-        URI uri = new URI(baseUrl);
+        final var baseUrl = "http://localhost:" + randomServerPort + "/actuator/health";
+        var uri = new URI(baseUrl);
 
-        ResponseEntity<String> result = restTemplate.getForEntity(uri, String.class);
+        var result = restTemplate.getForEntity(uri, String.class);
 
-        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Assertions.assertThat(result.getBody()).contains("UP");
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getBody()).contains("UP");
     }
 }

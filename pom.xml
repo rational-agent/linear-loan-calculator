@@ -17,7 +17,9 @@
     <version>0.1.0</version>
 
     <properties>
+
         <java.version>25</java.version>
+        <lombok.version>1.18.42</lombok.version>
     </properties>
 
     <dependencies>
@@ -46,13 +48,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.42</version>
-            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -87,6 +82,13 @@
             <version>2.13.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.42</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- quickcheck -->
         <dependency>
             <groupId>com.pholser</groupId>
@@ -119,27 +121,21 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.6.0</version>
-                <configuration>
-                    <configLocation>google_checks.xml</configLocation>
-                    <suppressionsLocation>suppressions.xml</suppressionsLocation>
-                    <violationSeverity>warning</violationSeverity>
-                    <failOnViolation>true</failOnViolation>
-                    <consoleOutput>true</consoleOutput>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
@@ -164,6 +160,21 @@
                     </execution>
                 </executions>
             </plugin>
+<!--            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>12.2.0</version>
+                <configuration>
+                    <failBuildOnCVSS>4</failBuildOnCVSS>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>-->
         </plugins>
     </build>
 

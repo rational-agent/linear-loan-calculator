@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loan-calculator
+spec:
+  selector:
+    matchLabels:
+      app: loan-calculator
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: loan-calculator
+    spec:
+      containers:
+        - name: loan-calculator
+          image: loan-calculator:0.1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080 # The port that the container is running on in the cluster

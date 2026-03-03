@@ -1,8 +1,8 @@
 package com.rationalagent.loancalculator.calculator;
 
-import com.rationalagent.loancalculator.loan.repository.model.LoanDetails;
-import com.rationalagent.loancalculator.loan.repository.model.Payment;
-import com.rationalagent.loancalculator.loan.repository.model.PaymentType;
+import com.rationalagent.loancalculator.loan.repository.dto.LoanDetails;
+import com.rationalagent.loancalculator.calculator.dto.Payment;
+import com.rationalagent.loancalculator.calculator.dto.PaymentType;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -23,7 +23,7 @@ class LoanCalculatorHelper {
 
 
     static Integer calculateTermInMonths(LoanDetails spec) {
-        return LoanCalculatorHelper.calculateLoanLifeInMonths(spec.getStartDate(), spec.getEndDate());
+        return LoanCalculatorHelper.calculateLoanLifeInMonths(spec.startDate(), spec.endDate());
     }
 
     static BigDecimal calculateMonthlyInterestRate(BigDecimal yearlyInterestRate) {
@@ -44,13 +44,13 @@ class LoanCalculatorHelper {
     }
 
     static Payment calculateFirstPrincipalPayment(LoanDetails spec) {
-        var startDateWeight = LoanCalculatorHelper.getMonthWeight(spec.getStartDate());
+        var startDateWeight = LoanCalculatorHelper.getMonthWeight(spec.startDate());
         var regularPayment = calculatePrincipalPayment(spec);
         return new Payment(PaymentType.PRINCIPAL_PAYMENT, regularPayment.getPaymentUnrounded().multiply(startDateWeight));
     }
 
     static Payment calculatePrincipalPayment(LoanDetails spec) {
-        return new Payment(PaymentType.PRINCIPAL_PAYMENT, spec.getPrincipal().divide(new BigDecimal(calculateTermInMonths(spec)), 10, RoundingMode.HALF_EVEN));
+        return new Payment(PaymentType.PRINCIPAL_PAYMENT, spec.principal().divide(new BigDecimal(calculateTermInMonths(spec)), 10, RoundingMode.HALF_EVEN));
     }
 
     static BigDecimal calculateMonthlyInterest(BigDecimal remainingPrincipal, BigDecimal decimalInterest) {
