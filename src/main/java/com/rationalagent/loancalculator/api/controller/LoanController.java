@@ -1,0 +1,81 @@
+package com.rationalagent.loancalculator.api.controller;
+
+import com.rationalagent.loancalculator.core.service.LoanService;
+import com.rationalagent.loancalculator.core.model.Loan;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * REST API for creating, reading, calculating, and deleting loans.
+ *
+ */
+@CrossOrigin
+@RestController
+@RequiredArgsConstructor
+public class LoanController {
+
+    private final LoanService service;
+
+    @GetMapping("/loans")
+    public List<Loan> readAll() {
+        return service.calculateAll();
+    }
+
+    @GetMapping("/loans/{id}")
+    public Loan read(@PathVariable Long id) {
+        return service.read(id);
+    }
+
+    @PostMapping("/loans")
+    public Loan create() {
+        return service.create(new Loan());
+    }
+
+    @PostMapping("/loans/{id}/calculate")
+    public Loan calculate(@PathVariable Long id, @RequestBody @Valid Loan loan) {
+        return service.calculate(id, loan);
+    }
+
+    @PutMapping("/loans/{id}")
+    public Loan update(@PathVariable Long id, @RequestBody Loan loan) {
+        return service.update(id, loan);
+    }
+
+    @DeleteMapping("/loans/{id}")
+    public boolean delete(@PathVariable Long id) {
+        return service.delete(id);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiError myError(HttpServletRequest request, MethodArgumentNotValidException exception) {
+        return new ApiError(
+                HttpStatus.BAD_REQUEST,
+                LocalDateTime.now(),
+                "The input data was invalid",
+                exception.getBindingResult()
+                        .getAllErrors()
+                        .stream()
+                        .map(ObjectError::getDefaultMessage)
+                        .collect(Collectors.toList())
+        );
+    }
+
+}
