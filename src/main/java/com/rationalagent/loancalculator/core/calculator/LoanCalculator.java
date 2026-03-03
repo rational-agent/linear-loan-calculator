@@ -5,24 +5,15 @@ import com.rationalagent.loancalculator.core.dto.AmortizationSummary;
 import com.rationalagent.loancalculator.core.model.Loan;
 import com.rationalagent.loancalculator.core.dto.LoanDetails;
 import com.rationalagent.loancalculator.core.dto.MonthlyPayment;
-import com.rationalagent.loancalculator.core.calculator.dto.Payment;
-import com.rationalagent.loancalculator.core.calculator.dto.PaymentType;
+import com.rationalagent.loancalculator.core.dto.Payment;
+import com.rationalagent.loancalculator.core.dto.PaymentType;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
 
-/**
- * Calculates a loan including amortization.
- *
- */
 public class LoanCalculator {
 
-    /**
-     * Calculates a loan based on loan details.
-     *
-     * @return a loan which includes a loan summary and amortization schedule.
-     */
     public static Loan calculateLoan(LoanDetails spec) {
         var termAmount = LoanCalculatorHelper.calculateTermInMonths(spec);
         var interestRateAsDecimal = spec.interestRate().movePointLeft(2);

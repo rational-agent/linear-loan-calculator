@@ -1,8 +1,8 @@
 package com.rationalagent.loancalculator.core.calculator;
 
 import com.rationalagent.loancalculator.core.dto.LoanDetails;
-import com.rationalagent.loancalculator.core.calculator.dto.Payment;
-import com.rationalagent.loancalculator.core.calculator.dto.PaymentType;
+import com.rationalagent.loancalculator.core.dto.Payment;
+import com.rationalagent.loancalculator.core.dto.PaymentType;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

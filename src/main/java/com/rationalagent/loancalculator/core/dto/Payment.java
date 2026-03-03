@@ -1,4 +1,4 @@
-package com.rationalagent.loancalculator.core.calculator.dto;
+package com.rationalagent.loancalculator.core.dto;
 
 
 import lombok.Getter;

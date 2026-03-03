@@ -1,41 +1,31 @@
 package com.rationalagent.loancalculator.core.calculator;
 
+import com.rationalagent.loancalculator.core.dto.Payment;
+import com.rationalagent.loancalculator.core.dto.PaymentType;
 import com.rationalagent.loancalculator.core.dto.LoanDetails;
 import com.rationalagent.loancalculator.core.dto.MonthlyPayment;
-import com.rationalagent.loancalculator.core.calculator.dto.Payment;
-import com.rationalagent.loancalculator.core.calculator.dto.PaymentType;
+import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.rationalagent.loancalculator.core.calculator.LoanCalculatorHelper.recalculatePrincipalBalance;
+import static java.math.BigDecimal.ZERO;
 
-/**
- * A utility class for converting lengths between metric and imperial units.
- *
- */
+@NoArgsConstructor
 public final class AmortizationCalculator {
 
-    private AmortizationCalculator() {
+    public static List<MonthlyPayment> calculateAmortizationSchedule(LoanDetails loanDetails) {
+        var interestRateAsDecimal = loanDetails.interestRate().movePointLeft(2);
 
-    }
+        var firstPrincipalPayment = LoanCalculatorHelper.calculateFirstPrincipalPayment(loanDetails);
+        var regularPrincipalPayment = LoanCalculatorHelper.calculatePrincipalPayment(loanDetails);
+        var paymentDate = loanDetails.startDate().withDayOfMonth(loanDetails.payDay());
 
-    /**
-     * Calculates the amortization schedule for a loan.
-     *
-     * @return a list of monthly payments, also known as the amortization schedule.
-     */
-    public static List<MonthlyPayment> calculateAmortizationSchedule(LoanDetails spec) {
-        var interestRateAsDecimal = spec.interestRate().movePointLeft(2);
-
-        var firstMonth = LoanCalculatorHelper.calculateFirstPrincipalPayment(spec);
-        var regular = LoanCalculatorHelper.calculatePrincipalPayment(spec);
-        var paymentDate = spec.startDate().withDayOfMonth(spec.payDay());
-
-        var principalBalance = spec.principal();
+        var principalBalance = loanDetails.principal();
         var monthlyPayments = new ArrayList<MonthlyPayment>();
-        while (principalBalance.compareTo(BigDecimal.ZERO) > 0) {
-            var principalPayment = getPrincipalPayment(spec, principalBalance, firstMonth, regular);
+        while (loanNotFullyRepaid(principalBalance)) {
+            var principalPayment = getPrincipalPayment(loanDetails, principalBalance, firstPrincipalPayment, regularPrincipalPayment);
             var interestPayment = getInterestPayment(principalBalance, interestRateAsDecimal);
 
             principalBalance = recalculatePrincipalBalance(principalBalance, principalPayment.getPaymentRounded());
@@ -54,19 +44,33 @@ public final class AmortizationCalculator {
         return monthlyPayments;
     }
 
+    private static boolean loanNotFullyRepaid(BigDecimal principalBalance) {
+        return principalBalance.compareTo(ZERO) > 0;
+    }
+
     private static Payment getInterestPayment(BigDecimal principalBalance, BigDecimal interestRateAsDecimal) {
         var monthlyInterest = LoanCalculatorHelper.calculateMonthlyInterest(principalBalance, interestRateAsDecimal);
         return new Payment(PaymentType.INTEREST_PAYMENT, monthlyInterest);
     }
 
-    private static Payment getPrincipalPayment(
-            LoanDetails spec, BigDecimal principalBalance, Payment firstMonth, Payment regular) {
-        if (principalBalance.compareTo(spec.principal()) == 0) {
-            return firstMonth;
-        } else if (principalBalance.compareTo(regular.getPaymentRounded()) <= 0) {
+    private static Payment getPrincipalPayment(LoanDetails loanDetails,
+                                               BigDecimal principalBalance,
+                                               Payment firstPrincipalPayment,
+                                               Payment regularPrincipalPayment) {
+        if (isFirstPrincipalPayment(loanDetails, principalBalance)) {
+            return firstPrincipalPayment;
+        } else if (isRegularPrincipalPayment(principalBalance, regularPrincipalPayment)) {
             return new Payment(PaymentType.PRINCIPAL_PAYMENT, principalBalance);
         } else {
-            return regular;
+            return regularPrincipalPayment;
         }
+    }
+
+    private static boolean isFirstPrincipalPayment(LoanDetails loanDetails, BigDecimal principalBalance) {
+        return principalBalance.compareTo(loanDetails.principal()) == 0;
+    }
+
+    private static boolean isRegularPrincipalPayment(BigDecimal principalBalance, Payment regularPrincipalPayment) {
+        return principalBalance.compareTo(regularPrincipalPayment.getPaymentRounded()) <= 0;
     }
 }
