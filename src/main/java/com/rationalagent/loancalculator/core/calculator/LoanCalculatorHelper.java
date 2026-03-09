@@ -21,7 +21,6 @@ public class LoanCalculatorHelper {
         }
     }
 
-
     static Integer calculateTermInMonths(LoanDetails spec) {
         return LoanCalculatorHelper.calculateLoanLifeInMonths(spec.startDate(), spec.endDate());
     }
@@ -30,7 +29,21 @@ public class LoanCalculatorHelper {
         return yearlyInterestRate.divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_EVEN);
     }
 
-    public static BigDecimal getMonthWeight(LocalDate date) {
+    static Payment calculateFirstPrincipalPayment(LoanDetails loanDetails) {
+        var startDateWeight = getMonthWeight(loanDetails.startDate());
+        var regularPayment = calculatePrincipalPayment(loanDetails);
+        return new Payment(PaymentType.PRINCIPAL_PAYMENT, regularPayment.getPaymentUnrounded().multiply(startDateWeight));
+    }
+
+    static Payment calculatePrincipalPayment(LoanDetails loanDetails) {
+        return new Payment(PaymentType.PRINCIPAL_PAYMENT, loanDetails.principal().divide(new BigDecimal(calculateTermInMonths(loanDetails)), 10, RoundingMode.HALF_EVEN));
+    }
+
+    static BigDecimal calculateMonthlyInterest(BigDecimal remainingPrincipal, BigDecimal decimalInterest) {
+        return remainingPrincipal.multiply(LoanCalculatorHelper.calculateMonthlyInterestRate(decimalInterest));
+    }
+
+    private static BigDecimal getMonthWeight(LocalDate date) {
         if (date.getDayOfMonth() == 1) {
             return BigDecimal.ONE;
         } else {
@@ -41,20 +54,6 @@ public class LoanCalculatorHelper {
 
             return BigDecimal.valueOf((1.0 / amountOfDaysInMonth) * amountOfDaysInBetween);
         }
-    }
-
-    static Payment calculateFirstPrincipalPayment(LoanDetails spec) {
-        var startDateWeight = LoanCalculatorHelper.getMonthWeight(spec.startDate());
-        var regularPayment = calculatePrincipalPayment(spec);
-        return new Payment(PaymentType.PRINCIPAL_PAYMENT, regularPayment.getPaymentUnrounded().multiply(startDateWeight));
-    }
-
-    static Payment calculatePrincipalPayment(LoanDetails spec) {
-        return new Payment(PaymentType.PRINCIPAL_PAYMENT, spec.principal().divide(new BigDecimal(calculateTermInMonths(spec)), 10, RoundingMode.HALF_EVEN));
-    }
-
-    static BigDecimal calculateMonthlyInterest(BigDecimal remainingPrincipal, BigDecimal decimalInterest) {
-        return remainingPrincipal.multiply(LoanCalculatorHelper.calculateMonthlyInterestRate(decimalInterest));
     }
 
     private static int calculateLoanLifeInMonths(LocalDate startDate, LocalDate endDate) {
