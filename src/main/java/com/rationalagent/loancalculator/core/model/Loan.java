@@ -7,13 +7,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -28,14 +27,14 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "{error.principal.mandatory}")
-    @Positive(message = "{error.principal.belowMinimum}")
-    @Max(value = 1_000_000_000, message = "{error.principal.aboveMaximum}")
+    @NotNull
+    @Min(value = 1, message = "{error.belowMinimum}")
+    @Max(value = 1_000_000_000, message = "{error.aboveMaximum}")
     private BigDecimal principal;
 
-    @NotNull(message = "{error.interest.mandatory}")
-    @Min(value = 0, message = "{error.interest.belowMinimum}")
-    @Max(value = 100, message = "{error.interest.aboveMaximum}")
+    @NotNull
+    @Min(value = 0, message = "{error.belowMinimum}")
+    @Max(value = 100, message = "{error.aboveMaximum}")
     private BigDecimal interestRate;
 
     @NotNull
@@ -47,7 +46,7 @@ public class Loan {
     @NotNull
     @Min(value = 1, message = "{error.interest.belowMinimum}")
     @Max(value = 28, message = "{error.interest.aboveMaximum}")
-    private int payDay;
+    private Integer payDay;
 
     @Transient
     private LoanSummary loanSummary;

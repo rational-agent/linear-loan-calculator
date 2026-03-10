@@ -15,10 +15,8 @@ public class LoanService {
 
     private final LoanRepository repository;
 
-    public List<Loan> calculateAll() {
-        return readAll().stream()
-                .map(loan -> calculate(loan.getId(), loan))
-                .toList();
+    public List<Loan> readAll() {
+        return repository.findAll();
     }
 
     public Loan calculate(Long id, Loan loan) {
@@ -39,10 +37,6 @@ public class LoanService {
                     return repository.upsert(loan);
                 })
                 .orElseThrow(() -> new LoanNotFoundException("Loan with id not found: " + id));
-    }
-
-    public List<Loan> readAll() {
-        return repository.findAll();
     }
 
     public Loan read(Long id) {
