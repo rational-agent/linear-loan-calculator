@@ -21,18 +21,10 @@ public class LoanCalculatorHelper {
         }
     }
 
-    static Integer calculateTermInMonths(LoanDetails spec) {
-        return LoanCalculatorHelper.calculateLoanLifeInMonths(spec.startDate(), spec.endDate());
-    }
-
-    static BigDecimal calculateMonthlyInterestRate(BigDecimal yearlyInterestRate) {
-        return yearlyInterestRate.divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_EVEN);
-    }
-
     static Payment calculateFirstPrincipalPayment(LoanDetails loanDetails) {
         var startDateWeight = getMonthWeight(loanDetails.startDate());
         var regularPayment = calculatePrincipalPayment(loanDetails);
-        return new Payment(PaymentType.PRINCIPAL_PAYMENT, regularPayment.getPaymentUnrounded().multiply(startDateWeight));
+        return new Payment(PaymentType.PRINCIPAL_PAYMENT, regularPayment.getPaymentRounded().multiply(startDateWeight));
     }
 
     static Payment calculatePrincipalPayment(LoanDetails loanDetails) {
@@ -40,9 +32,18 @@ public class LoanCalculatorHelper {
     }
 
     static BigDecimal calculateMonthlyInterest(BigDecimal remainingPrincipal, BigDecimal decimalInterest) {
-        return remainingPrincipal.multiply(LoanCalculatorHelper.calculateMonthlyInterestRate(decimalInterest));
+        return remainingPrincipal.multiply(calculateMonthlyInterestRate(decimalInterest));
     }
 
+    private static BigDecimal calculateMonthlyInterestRate(BigDecimal yearlyInterestRate) {
+        return yearlyInterestRate.divide(BigDecimal.valueOf(12), 10, RoundingMode.HALF_EVEN);
+    }
+
+    private static Integer calculateTermInMonths(LoanDetails loanDetails) {
+        return calculateLoanLifeInMonths(loanDetails.startDate(), loanDetails.endDate());
+    }
+
+    // TODO: remove and assume first day of month
     private static BigDecimal getMonthWeight(LocalDate date) {
         if (date.getDayOfMonth() == 1) {
             return BigDecimal.ONE;

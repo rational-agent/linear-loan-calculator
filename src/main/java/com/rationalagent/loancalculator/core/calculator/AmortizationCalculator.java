@@ -16,7 +16,6 @@ import static java.math.BigDecimal.ZERO;
 public final class AmortizationCalculator {
 
     public static List<MonthlyPayment> calculateAmortizationSchedule(LoanDetails loanDetails) {
-        var interestRateAsDecimal = loanDetails.interestRate().movePointLeft(2);
 
         var firstPrincipalPayment = LoanCalculatorHelper.calculateFirstPrincipalPayment(loanDetails);
         var regularPrincipalPayment = LoanCalculatorHelper.calculatePrincipalPayment(loanDetails);
@@ -24,20 +23,21 @@ public final class AmortizationCalculator {
 
         var principalBalance = loanDetails.principal();
         var monthlyPayments = new ArrayList<MonthlyPayment>();
+
+        final var interestRateAsDecimal = loanDetails.interestRate().movePointLeft(2);
         while (loanNotFullyRepaid(principalBalance)) {
-            var principalPayment = getPrincipalPayment(loanDetails, principalBalance, firstPrincipalPayment, regularPrincipalPayment);
-            var interestPayment = getInterestPayment(principalBalance, interestRateAsDecimal);
+            final var principalPayment = getPrincipalPayment(loanDetails, principalBalance, firstPrincipalPayment, regularPrincipalPayment);
+            final var interestPayment = getInterestPayment(principalBalance, interestRateAsDecimal);
 
             principalBalance = recalculatePrincipalBalance(principalBalance, principalPayment.getPaymentRounded());
-
-            monthlyPayments.add(
-                    new MonthlyPayment(
-                            paymentDate,
-                            principalPayment.getPaymentRounded(),
-                            interestPayment.getPaymentRounded(),
-                            principalBalance)
+            var monthlyPayment = new MonthlyPayment(
+                    paymentDate,
+                    principalPayment.getPaymentRounded(),
+                    interestPayment.getPaymentRounded(),
+                    principalBalance
             );
 
+            monthlyPayments.add(monthlyPayment);
             paymentDate = paymentDate.plusMonths(1);
         }
 

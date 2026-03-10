@@ -32,24 +32,6 @@ class LoanCalculationHelperTest {
     }
 
     @Test
-    void shouldCalculateTermInMonths() {
-        var loanDetails = getLoanDetails();
-
-        var term = LoanCalculatorHelper.calculateTermInMonths(loanDetails);
-
-        assertEquals(360, term);
-    }
-
-    @Test
-    void shouldCalculateMonthlyInterestRate() {
-        var yearlyRate = BigDecimal.valueOf(0.12);
-
-        var monthlyRate = LoanCalculatorHelper.calculateMonthlyInterestRate(yearlyRate);
-
-        assertEquals(0, BigDecimal.valueOf(0.01).compareTo(monthlyRate));
-    }
-
-    @Test
     void shouldCalculatePrincipalPayment() {
         var loanDetails = getLoanDetails();
 
