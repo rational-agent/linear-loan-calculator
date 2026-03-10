@@ -16,15 +16,13 @@ import static java.math.BigDecimal.ZERO;
 public final class AmortizationCalculator {
 
     public static List<MonthlyPayment> calculateAmortizationSchedule(LoanDetails loanDetails) {
-
-        var firstPrincipalPayment = LoanCalculatorHelper.calculateFirstPrincipalPayment(loanDetails);
-        var regularPrincipalPayment = LoanCalculatorHelper.calculatePrincipalPayment(loanDetails);
-        var paymentDate = loanDetails.startDate().withDayOfMonth(loanDetails.payDay());
+        final var firstPrincipalPayment = LoanCalculatorHelper.calculateFirstPrincipalPayment(loanDetails);
+        final var regularPrincipalPayment = LoanCalculatorHelper.calculatePrincipalPayment(loanDetails);
+        final var interestRateAsDecimal = loanDetails.interestRate().movePointLeft(2);
 
         var principalBalance = loanDetails.principal();
         var monthlyPayments = new ArrayList<MonthlyPayment>();
-
-        final var interestRateAsDecimal = loanDetails.interestRate().movePointLeft(2);
+        var paymentDate = loanDetails.startDate().withDayOfMonth(loanDetails.payDay());
         while (loanNotFullyRepaid(principalBalance)) {
             final var principalPayment = getPrincipalPayment(loanDetails, principalBalance, firstPrincipalPayment, regularPrincipalPayment);
             final var interestPayment = getInterestPayment(principalBalance, interestRateAsDecimal);
