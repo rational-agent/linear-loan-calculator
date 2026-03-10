@@ -1,6 +1,6 @@
 package com.rationalagent.loancalculator.core.model;
 
-import com.rationalagent.loancalculator.core.dto.AmortizationSummary;
+import com.rationalagent.loancalculator.core.dto.LoanSummary;
 import com.rationalagent.loancalculator.core.dto.MonthlyPayment;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -50,10 +50,10 @@ public class Loan {
     private int payDay;
 
     @Transient
-    private AmortizationSummary amortizationSummary;
+    private LoanSummary loanSummary;
 
     @Transient
-    private List<MonthlyPayment> amortizationSchedule;
+    private List<MonthlyPayment> paymentSchedule;
 
     public Loan(BigDecimal principal, BigDecimal interestRate, LocalDate startDate, LocalDate endDate, int payDay) {
         this.principal = principal;

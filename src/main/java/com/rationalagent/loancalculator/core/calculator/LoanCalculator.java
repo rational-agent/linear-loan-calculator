@@ -1,45 +1,37 @@
 package com.rationalagent.loancalculator.core.calculator;
 
 
-import com.rationalagent.loancalculator.core.dto.AmortizationSummary;
 import com.rationalagent.loancalculator.core.dto.LoanDetails;
+import com.rationalagent.loancalculator.core.dto.LoanSummary;
 import com.rationalagent.loancalculator.core.dto.MonthlyPayment;
 import com.rationalagent.loancalculator.core.model.Loan;
+import com.rationalagent.loancalculator.core.util.LoanDetailsUtil;
 import java.math.BigDecimal;
 import java.util.List;
+
+import static java.math.BigDecimal.ZERO;
 
 
 public final class LoanCalculator {
 
     public static Loan calculateLoan(LoanDetails loanDetails) {
-        var amortization = AmortizationCalculator.calculateAmortizationSchedule(loanDetails);
+        var loan = LoanDetailsUtil.getLoan(loanDetails);
+        var paymentSchedule = AmortizationCalculator.calculatePaymentSchedule(loanDetails);
+        var summary = getLoanSummary(paymentSchedule);
 
-        var payedLoanAmount = amortization.stream()
-                .map(MonthlyPayment::principalPayment)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        var payedInterestAmount = amortization.stream()
-                .map(MonthlyPayment::interestPayment)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        return buildLoan(loanDetails, payedLoanAmount, payedInterestAmount, amortization);
+        return buildLoan(loan, summary, paymentSchedule);
     }
 
-    private static Loan buildLoan(LoanDetails loanDetails, BigDecimal paidPrincipal, BigDecimal paidInterest, List<MonthlyPayment> monthlyPayments) {
-        var loan = new Loan(
-                loanDetails.principal(),
-                loanDetails.interestRate(),
-                loanDetails.startDate(),
-                loanDetails.endDate(),
-                loanDetails.payDay()
-        );
-        var summary = new AmortizationSummary(
-                paidPrincipal.add(paidInterest),
-                paidPrincipal,
-                paidInterest
-        );
+    private static LoanSummary getLoanSummary(List<MonthlyPayment> paymentSchedule) {
+        var paidPrincipal = paymentSchedule.stream().map(MonthlyPayment::principalPayment).reduce(ZERO, BigDecimal::add);
+        var paidInterest = paymentSchedule.stream().map(MonthlyPayment::interestPayment).reduce(ZERO, BigDecimal::add);
 
-        loan.setAmortizationSummary(summary);
-        loan.setAmortizationSchedule(monthlyPayments);
+        return new LoanSummary(paidPrincipal, paidInterest);
+    }
+
+    private static Loan buildLoan(Loan loan, LoanSummary loanSummary, List<MonthlyPayment> monthlyPayments) {
+        loan.setLoanSummary(loanSummary);
+        loan.setPaymentSchedule(monthlyPayments);
 
         return loan;
     }

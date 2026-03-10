@@ -2,9 +2,9 @@ package com.rationalagent.loancalculator.core.service;
 
 import com.rationalagent.loancalculator.core.calculator.LoanCalculator;
 import com.rationalagent.loancalculator.api.exception.LoanNotFoundException;
+import com.rationalagent.loancalculator.core.util.LoanDetailsUtil;
 import com.rationalagent.loancalculator.infrastructure.persistence.LoanRepository;
 import com.rationalagent.loancalculator.core.model.Loan;
-import com.rationalagent.loancalculator.core.dto.LoanDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -22,8 +22,8 @@ public class LoanService {
     }
 
     public Loan calculate(Long id, Loan loan) {
-        var spec = getLoanDetails(loan);
-        var calculatedLoan = LoanCalculator.calculateLoan(spec);
+        var loanDetails = LoanDetailsUtil.getLoanDetails(loan);
+        var calculatedLoan = LoanCalculator.calculateLoan(loanDetails);
 
         return update(id, calculatedLoan);
     }
@@ -54,16 +54,6 @@ public class LoanService {
         return true;
     }
 
-    private static LoanDetails getLoanDetails(Loan loan) {
-        return new LoanDetails(
-                loan.getPrincipal(),
-                loan.getInterestRate(),
-                loan.getStartDate(),
-                loan.getEndDate(),
-                loan.getPayDay()
-        );
-    }
-
     private static void applyUpdate(Loan loan, Loan loanUpdate) {
         loan.setPrincipal(loanUpdate.getPrincipal());
         loan.setInterestRate(loanUpdate.getInterestRate());
@@ -71,7 +61,7 @@ public class LoanService {
         loan.setEndDate(loanUpdate.getEndDate());
         loan.setPayDay(loanUpdate.getPayDay());
 
-        loan.setAmortizationSchedule(loanUpdate.getAmortizationSchedule());
-        loan.setAmortizationSummary(loanUpdate.getAmortizationSummary());
+        loan.setPaymentSchedule(loanUpdate.getPaymentSchedule());
+        loan.setLoanSummary(loanUpdate.getLoanSummary());
     }
 }

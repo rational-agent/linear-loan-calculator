@@ -15,7 +15,7 @@ import static java.math.BigDecimal.ZERO;
 @NoArgsConstructor
 public final class AmortizationCalculator {
 
-    public static List<MonthlyPayment> calculateAmortizationSchedule(LoanDetails loanDetails) {
+    public static List<MonthlyPayment> calculatePaymentSchedule(LoanDetails loanDetails) {
         final var firstPrincipalPayment = LoanCalculatorHelper.calculateFirstPrincipalPayment(loanDetails);
         final var regularPrincipalPayment = LoanCalculatorHelper.calculatePrincipalPayment(loanDetails);
         final var interestRateAsDecimal = loanDetails.interestRate().movePointLeft(2);

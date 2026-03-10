@@ -1,8 +1,5 @@
 package com.rationalagent.loancalculator.core.calculator;
 
-import com.rationalagent.loancalculator.core.calculator.AmortizationCalculator;
-import com.rationalagent.loancalculator.core.calculator.LoanCalculator;
-import com.rationalagent.loancalculator.core.dto.AmortizationSummary;
 import com.rationalagent.loancalculator.core.dto.LoanDetails;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LoanCalculatorTest {
 
-    LoanDetails spec = new LoanDetails(
+    LoanDetails loanDetails = new LoanDetails(
             new BigDecimal("500000.00"),
             new BigDecimal("1.75"),
             LocalDate.of(2020, 1, 15),
@@ -23,20 +20,19 @@ class LoanCalculatorTest {
 
     @Test
     void shouldCalculateTermInMonths() {
-        assertEquals(361, AmortizationCalculator.calculateAmortizationSchedule(spec).size());
+        assertEquals(361, AmortizationCalculator.calculatePaymentSchedule(loanDetails).size());
     }
 
-    // TODO: create separate method for the amortization summary
     @Test
     void shouldCalculateAmortizationSummary() {
-        AmortizationSummary as = LoanCalculator.calculateLoan(spec).getAmortizationSummary();
-        assertEquals(spec.principal(), as.loanAmount());
+        var summary = LoanCalculator.calculateLoan(loanDetails).getLoanSummary();
+        assertEquals(loanDetails.principal(), summary.getPrincipalAmount());
     }
 
     @Test
     void dayOfMonthShouldBeEqualToPayDay() {
-        assertEquals(spec.payDay(),
-                LoanCalculator.calculateLoan(spec).getAmortizationSchedule()
+        assertEquals(loanDetails.payDay(),
+                LoanCalculator.calculateLoan(loanDetails).getPaymentSchedule()
                         .stream()
                         .map(payment -> payment.paymentDate().getDayOfMonth())
                         .distinct()
