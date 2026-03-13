@@ -1,4 +1,4 @@
-# Loan Calculator
+# Linear Loan Calculator
 ## Introduction
 A web service for loan calculations
 
@@ -10,10 +10,8 @@ Or
 minikube start
 
 ### TODO:
-1. simplify to linear-loan-calculator
-2. https://www.baeldung.com/jpa-one-to-one for LoanSummary
-3. store monthlyPayment in db
-4. create k8s cluster:
+1. create a docker container
+2. 
 
 #### links
 

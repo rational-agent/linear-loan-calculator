@@ -34,7 +34,7 @@ class LoanCalculatorTest {
         assertEquals(loanDetails.payDay(),
                 LoanCalculator.calculateLoan(loanDetails).getPaymentSchedule()
                         .stream()
-                        .map(payment -> payment.paymentDate().getDayOfMonth())
+                        .map(payment -> payment.getPaymentDate().getDayOfMonth())
                         .distinct()
                         .toList()
                         .getFirst());

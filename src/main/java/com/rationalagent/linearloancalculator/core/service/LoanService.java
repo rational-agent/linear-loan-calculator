@@ -1,10 +1,10 @@
 package com.rationalagent.linearloancalculator.core.service;
 
-import com.rationalagent.linearloancalculator.core.calculator.LoanCalculator;
 import com.rationalagent.linearloancalculator.api.exception.LoanNotFoundException;
+import com.rationalagent.linearloancalculator.core.calculator.LoanCalculator;
+import com.rationalagent.linearloancalculator.core.model.Loan;
 import com.rationalagent.linearloancalculator.core.util.LoanDetailsUtil;
 import com.rationalagent.linearloancalculator.infrastructure.persistence.LoanRepository;
-import com.rationalagent.linearloancalculator.core.model.Loan;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -13,10 +13,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LoanService {
 
-    private final LoanRepository repository;
+    private final LoanRepository loanRepository;
 
     public List<Loan> readAll() {
-        return repository.findAll();
+        return loanRepository.findAll();
     }
 
     public Loan calculate(Long id, Loan loan) {
@@ -27,24 +27,25 @@ public class LoanService {
     }
 
     public Loan create(Loan loan) {
-        return repository.upsert(loan);
+        return loanRepository.upsert(loan);
     }
 
     public Loan update(Long id, Loan loanUpdate) {
-        return repository.findById(id)
+        return loanRepository.findById(id)
                 .map(loan -> {
+                    loanRepository.deletePaymentSchedule(loan);
                     applyUpdate(loan, loanUpdate);
-                    return repository.upsert(loan);
+                    return loanRepository.upsert(loan);
                 })
                 .orElseThrow(() -> new LoanNotFoundException("Loan with id not found: " + id));
     }
 
     public Loan read(Long id) {
-        return repository.getReferenceById(id);
+        return loanRepository.getReferenceById(id);
     }
 
     public boolean delete(Long id) {
-        repository.deleteById(id);
+        loanRepository.deleteById(id);
         return true;
     }
 

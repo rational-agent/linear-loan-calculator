@@ -1,11 +1,13 @@
 package com.rationalagent.linearloancalculator.core.model;
 
 import com.rationalagent.linearloancalculator.core.dto.LoanSummary;
-import com.rationalagent.linearloancalculator.core.dto.MonthlyPayment;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -15,6 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -51,8 +54,8 @@ public class Loan {
     @Transient
     private LoanSummary loanSummary;
 
-    @Transient
-    private List<MonthlyPayment> paymentSchedule;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<MonthlyPayment> paymentSchedule = new ArrayList<>();
 
     public Loan(BigDecimal principal, BigDecimal interestRate, LocalDate startDate, LocalDate endDate, int payDay) {
         this.principal = principal;

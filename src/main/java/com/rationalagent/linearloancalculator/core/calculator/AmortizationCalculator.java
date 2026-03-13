@@ -3,7 +3,7 @@ package com.rationalagent.linearloancalculator.core.calculator;
 import com.rationalagent.linearloancalculator.core.dto.Payment;
 import com.rationalagent.linearloancalculator.core.dto.PaymentType;
 import com.rationalagent.linearloancalculator.core.dto.LoanDetails;
-import com.rationalagent.linearloancalculator.core.dto.MonthlyPayment;
+import com.rationalagent.linearloancalculator.core.model.MonthlyPayment;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -28,12 +28,11 @@ public final class AmortizationCalculator {
             final var interestPayment = getInterestPayment(principalBalance, interestRateAsDecimal);
 
             principalBalance = recalculatePrincipalBalance(principalBalance, principalPayment.getPaymentRounded());
-            var monthlyPayment = new MonthlyPayment(
-                    paymentDate,
-                    principalPayment.getPaymentRounded(),
-                    interestPayment.getPaymentRounded(),
-                    principalBalance
-            );
+            var monthlyPayment = new MonthlyPayment();
+            monthlyPayment.setPaymentDate(paymentDate);
+            monthlyPayment.setPrincipalPayment(principalPayment.getPaymentRounded());
+            monthlyPayment.setInterestPayment(interestPayment.getPaymentRounded());
+            monthlyPayment.setRemainingLoanAmount(principalBalance);
 
             monthlyPayments.add(monthlyPayment);
             paymentDate = paymentDate.plusMonths(1);

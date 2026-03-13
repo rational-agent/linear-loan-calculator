@@ -3,7 +3,7 @@ package com.rationalagent.linearloancalculator.core.calculator;
 
 import com.rationalagent.linearloancalculator.core.dto.LoanDetails;
 import com.rationalagent.linearloancalculator.core.dto.LoanSummary;
-import com.rationalagent.linearloancalculator.core.dto.MonthlyPayment;
+import com.rationalagent.linearloancalculator.core.model.MonthlyPayment;
 import com.rationalagent.linearloancalculator.core.model.Loan;
 import com.rationalagent.linearloancalculator.core.util.LoanDetailsUtil;
 import java.math.BigDecimal;
@@ -23,8 +23,8 @@ public final class LoanCalculator {
     }
 
     private static LoanSummary getLoanSummary(List<MonthlyPayment> paymentSchedule) {
-        var paidPrincipal = paymentSchedule.stream().map(MonthlyPayment::principalPayment).reduce(ZERO, BigDecimal::add);
-        var paidInterest = paymentSchedule.stream().map(MonthlyPayment::interestPayment).reduce(ZERO, BigDecimal::add);
+        var paidPrincipal = paymentSchedule.stream().map(MonthlyPayment::getPrincipalPayment).reduce(ZERO, BigDecimal::add);
+        var paidInterest = paymentSchedule.stream().map(MonthlyPayment::getInterestPayment).reduce(ZERO, BigDecimal::add);
 
         return new LoanSummary(paidPrincipal, paidInterest);
     }
