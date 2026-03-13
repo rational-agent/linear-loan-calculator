@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -jar target/loan-calculator-0.1.0.jar
+web: java -Dserver.port=$PORT -jar target/linear-loan-calculator-0.1.0.jar
