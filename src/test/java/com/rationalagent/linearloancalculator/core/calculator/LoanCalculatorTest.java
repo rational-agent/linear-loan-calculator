@@ -24,12 +24,6 @@ class LoanCalculatorTest {
     }
 
     @Test
-    void shouldCalculateAmortizationSummary() {
-        var summary = LoanCalculator.calculateLoan(loanDetails).getLoanSummary();
-        assertEquals(loanDetails.principal(), summary.getPrincipalAmount());
-    }
-
-    @Test
     void dayOfMonthShouldBeEqualToPayDay() {
         assertEquals(loanDetails.payDay(),
                 LoanCalculator.calculateLoan(loanDetails).getPaymentSchedule()

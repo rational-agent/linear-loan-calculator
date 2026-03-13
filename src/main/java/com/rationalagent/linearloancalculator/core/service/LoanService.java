@@ -57,6 +57,5 @@ public class LoanService {
         loan.setPayDay(loanUpdate.getPayDay());
 
         loan.setPaymentSchedule(loanUpdate.getPaymentSchedule());
-        loan.setLoanSummary(loanUpdate.getLoanSummary());
     }
 }

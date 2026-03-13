@@ -1,6 +1,5 @@
 package com.rationalagent.linearloancalculator.core.model;
 
-import com.rationalagent.linearloancalculator.core.dto.LoanSummary;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,7 +7,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -50,9 +48,6 @@ public class Loan {
     @Min(value = 1, message = "{error.interest.belowMinimum}")
     @Max(value = 28, message = "{error.interest.aboveMaximum}")
     private Integer payDay;
-
-    @Transient
-    private LoanSummary loanSummary;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<MonthlyPayment> paymentSchedule = new ArrayList<>();
