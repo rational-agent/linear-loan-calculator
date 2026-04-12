@@ -52,6 +52,7 @@ public class LoanService {
     private static void applyUpdate(Loan loan, Loan loanUpdate) {
         loan.setPrincipal(loanUpdate.getPrincipal());
         loan.setInterestRate(loanUpdate.getInterestRate());
+        loan.setTotalInterest(loanUpdate.getTotalInterest());
         loan.setStartDate(loanUpdate.getStartDate());
         loan.setEndDate(loanUpdate.getEndDate());
         loan.setPayDay(loanUpdate.getPayDay());

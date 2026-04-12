@@ -49,6 +49,8 @@ public class Loan {
     @Max(value = 28, message = "{error.interest.aboveMaximum}")
     private Integer payDay;
 
+    private BigDecimal totalInterest;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<MonthlyPayment> paymentSchedule = new ArrayList<>();
 
